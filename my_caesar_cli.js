@@ -5,7 +5,7 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-const fs = require('fs');
+const fs = require('fs').promises;
 
 const input = argv["input"];
 const output = argv["output"];
@@ -24,41 +24,34 @@ if (action !== "encode" && action !== "decode") {
     process.exit(0);
 }
 
-if (input) {
-    fs.readFile(input, 'utf8', (err, text) => {
-        if (err) {
-            console.error("Can't read file", err);
+main();
+async function main() {
+    let text;
+    if (input) {
+        try {
+            text = await fs.readFile(input, 'utf8');
+        } catch (err) {
+            console.error("Can't read file");
             process.exit(0);
         }
-        const result = coder.caesarShift(text, shift);
-        console.log(result);
-        stdout(result);
-    });
-} else {
-    rl.question("Please input a text: ", (text) => {
-        const result = coder.caesarShift(text, shift);
-        console.log(result);
-        stdout(result);
-        rl.close();
-    });
+        await write(text);
+        process.exit(0);
+    } else {
+        console.log("Please input a text:");
+        for await (text of rl) await write(text);
+    }
 }
 
-function stdout(text) {
+async function write(text) {
+    const result = coder.caesarShift(text, shift);
     if (output) {
-        fs.access(output, fs.F_OK, err => {
-            if (err) {
-                console.error("Can't write file", err);
-                process.exit(0);
-            }
-            console.log("file exists")
-
-            fs.appendFile(output, text, err => {
-                if (err) {
-                    console.error("Can't write file", err);
-                    process.exit(0);
-                }
-                console.log("success write")
-            });
-        })
+        try {
+            await fs.access(output, fs.F_OK);
+            await fs.appendFile(output, result);
+        } catch (err) {
+            console.error("Can't write file");
+        }
+    } else {
+        console.log(result);
     }
 }
