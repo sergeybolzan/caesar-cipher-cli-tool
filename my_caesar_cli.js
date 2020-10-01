@@ -5,7 +5,9 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-const fs = require('fs').promises;
+const fs = require('fs');
+// const fs = require('fs').promises;
+const {pipeline, Transform} = require('stream');
 
 const input = argv["input"];
 const output = argv["output"];
@@ -24,7 +26,38 @@ if (action !== "encode" && action !== "decode") {
     process.exit(0);
 }
 
-main();
+const transformStream = new Transform({
+    transform: (chunk, encoding, callback) => callback(null, coder.caesarShift(chunk.toString(), shift))
+});
+
+pipeline(
+    inputStream(),
+    transformStream,
+    outputStream(),
+    () => {}
+);
+
+function inputStream() {
+    let stream;
+    if (input) {
+        stream = fs.createReadStream(input).on('error', () => console.error("Can't read file"))
+    } else {
+        stream = process.stdin;
+    }
+    return stream;
+}
+
+function outputStream() {
+    let stream;
+    if (output) {
+        stream = fs.createWriteStream(output, {flags: 'a'}).on('error', () => console.error("Can't write file"))
+    } else {
+        stream = process.stdout;
+    }
+    return stream;
+}
+
+// main();
 async function main() {
     let text;
     if (input) {
