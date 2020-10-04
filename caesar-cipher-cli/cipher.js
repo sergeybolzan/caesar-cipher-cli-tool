@@ -11,11 +11,15 @@ module.exports = (text, shift) => {
         let char = text[i];
         const code = char.charCodeAt(0);
         if (code >= ALPHABET_UPPERCASE_START_CODE && code <= ALPHABET_UPPERCASE_END_CODE) {
-            char = String.fromCharCode(((code - ALPHABET_UPPERCASE_START_CODE + shift) % ALPHABET_LENGTH) + ALPHABET_UPPERCASE_START_CODE);
+            char = calculateChar(code, shift, ALPHABET_UPPERCASE_START_CODE);
         } else if (code >= ALPHABET_LOWERCASE_START_CODE && code <= ALPHABET_LOWERCASE_END_CODE) {
-            char = String.fromCharCode(((code - ALPHABET_LOWERCASE_START_CODE + shift) % ALPHABET_LENGTH) + ALPHABET_LOWERCASE_START_CODE);
+            char = calculateChar(code, shift, ALPHABET_LOWERCASE_START_CODE);
         }
         result += char;
     }
     return result;
 };
+
+function calculateChar(code, shift, alphabetStartCode) {
+    return String.fromCharCode(((code - alphabetStartCode + shift) % ALPHABET_LENGTH) + alphabetStartCode);
+}
