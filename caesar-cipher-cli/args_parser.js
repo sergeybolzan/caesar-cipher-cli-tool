@@ -1,9 +1,9 @@
 const argv = require("minimist")(process.argv.slice(2), {alias: {"shift": "s", "input": "i", "output": "o", "action": "a"}});
 
+let shift = argv["shift"];
+const action = argv["action"];
 const input = argv["input"];
 const output = argv["output"];
-const action = argv["action"];
-const shift = argv["shift"] * (action === "encode" ? 1 : -1);
 
 if (!Number.isInteger(shift)) {
     console.error("Please add correct shift option");
@@ -15,9 +15,12 @@ if (action !== "encode" && action !== "decode") {
     process.exit(-1);
 }
 
+if (action === "decode") {
+    shift = -shift;
+}
+
 module.exports = {
+    shift,
     input,
-    output,
-    action,
-    shift
+    output
 }

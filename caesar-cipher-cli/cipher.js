@@ -5,7 +5,7 @@ const ALPHABET_LOWERCASE_END_CODE = 122;
 const ALPHABET_LENGTH = 26;
 
 module.exports = (text, shift) => {
-    if (shift < 0) shift += ALPHABET_LENGTH;
+    while (shift < 0) shift += ALPHABET_LENGTH;
     let result = "";
     for (let i = 0; i < text.length; i++) {
         let char = text[i];
