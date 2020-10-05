@@ -1,6 +1,6 @@
 const {pipeline} = require("stream");
-const options = require("./args_parser");
-const {createInputStream, createTransformStream, createOutputStream} = require("./streams");
+const options = require("./js/args_parser");
+const {createInputStream, createTransformStream, createOutputStream} = require("./js/streams");
 
 pipeline(
     createInputStream(options.input),

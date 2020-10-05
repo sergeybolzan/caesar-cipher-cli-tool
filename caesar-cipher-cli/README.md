@@ -1,5 +1,17 @@
 # Caesar cipher CLI tool
 
+Caesar cipher CLI tool is a tool that will encode and decode a text by Caesar cipher.
+
+## Installation
+
+Use the package manager [npm](https://www.npmjs.com/) to install the tool.
+
+```bash
+npm install
+```
+
+## Usage
+
 To run the tool enter the following command in the CLI:
 
 ```bash

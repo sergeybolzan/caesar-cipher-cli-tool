@@ -1,3 +1,4 @@
+const path = require("path");
 const fs = require("fs");
 const {Transform} = require("stream");
 const cipher = require("./cipher");
@@ -5,7 +6,7 @@ const endProcessWithErrorMessage = require("./error");
 
 module.exports = {
     createInputStream: (input) => input
-        ? fs.createReadStream(input)
+        ? fs.createReadStream(path.resolve(__dirname, "../", input))
             .on("error", () => endProcessWithErrorMessage("Can't read file"))
         : process.stdin,
 
@@ -16,10 +17,11 @@ module.exports = {
     createOutputStream: (output) => {
         let stream;
         if (output) {
-            if (!fs.existsSync(output)) {
+            const outputPath = path.resolve(__dirname, "../", output);
+            if (!fs.existsSync(outputPath)) {
                 endProcessWithErrorMessage("Can't write file");
             }
-            stream = fs.createWriteStream(output, {flags: "a"})
+            stream = fs.createWriteStream(outputPath, {flags: "a"})
                 .on("error", () => endProcessWithErrorMessage("Can't write file"))
         } else {
             stream = process.stdout;
