@@ -24,13 +24,13 @@ These options are mandatory.
 To encrypt text from a file add `-i` option with the filename:
 
 ```bash
-node my_caesar_cli -a encode -s 1 -i input.txt
+node my_caesar_cli -a encode -s 1 -i i.txt
 ``` 
 
 To save the text to a file add `-o` option with the filename:
 
 ```bash
-node my_caesar_cli -a encode -s 1 -o option.txt
+node my_caesar_cli -a encode -s 1 -o o.txt
 ```
 
 List of all options (short alias and full name):
